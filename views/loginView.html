@@ -1,0 +1,98 @@
+@extern('header')
+
+	<div id="wrapper">
+
+		<div id="header">
+
+			<div id="hero">
+				<a href="landing">
+				<img src="img/system/hero.png" alt="">
+				</a>
+			</div>
+			
+			<div id="control">
+				<a href="register" class="css-button-rounded--sky">Unite</a>	
+			</div>
+			 
+	
+		</div>
+		 
+		<div id="content">
+
+			<div id="window">
+				
+				<div id="window__image">
+				
+				</div>
+
+				<div id="window__description">
+					
+					<h1>Bienvenido al login</h1>
+
+					<form action="" method="POST">
+						
+						<!-- Caja donde se muestra el error de logueo -->
+						<div id="msg_box"></div>
+
+						<input id="txt_email" type="email" name="txt_email" placeholder="Email" required>
+						<input id="txt_pass" type="password" name="txt_pass" placeholder="Contraseña" required>
+						<input id="btn_login" type="submit" id="btn_login" name="btn_login" value="Ingresar">
+
+					</form>
+				</div>
+
+			</div>
+		</div>
+		 
+
+		
+		 
+	
+
+
+	 <script type="text/javascript">
+	 	
+	 	/*< Al presionar el botón de logueo */
+	 	btn_login.addEventListener("click", e => {
+
+	 		/*< evita la recarga de la página */
+	 		e.preventDefault();
+
+	 		/*< Realiza el intento de logueo */
+	 		login(txt_email.value, txt_pass.value).then( data => {
+
+	 			// si el logueo fue valido
+	 			if(data.list.errno == 200){
+	 				/*< Redirecciona al panel */
+	 				window.location.href = "home";
+	 			}
+
+	 			/*< El logueo no fue valido, muestra el error */
+	 			msg_box.textContent = data.list.error;
+	 		})
+	 	})
+
+
+	 	/**
+	 	 * 
+	 	 * @brief Realiza el logueo con el email y contraseña GET
+	 	 * @param string email correo electrónico del usuario
+	 	 * @param string pass contraseña del usuario
+	 	 * @return json respuesta del intento de logueo
+	 	 * 
+	 	 * */
+	 	async function login(email, pass){
+	 		/*< consulta a la API */
+	 		const response = await fetch("api/user/login/?txt_email="+email+"&txt_pass="+pass);
+	 		/*< convierte la respuesta a formato json */
+	 		const data = await response.json();
+
+	 		return data;
+
+	 	}
+
+	 </script>
+
+	  </div>
+
+@extern('footer')

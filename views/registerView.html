@@ -1,0 +1,109 @@
+@extern('header')
+
+	<div id="wrapper">
+
+		<div id="header">
+
+			<div id="hero">
+				<a href="landing">
+				<img src="img/system/hero.png" alt="">
+				</a>
+			</div>
+			
+			<div id="control">
+				<a href="login" class="css-button-rounded--sky">Login</a>	
+			</div>
+			 
+	
+		</div>
+		 
+		<div id="content">
+
+			<div id="window">
+				
+				<div id="window__image">
+				
+				</div>
+
+				<div id="window__description">
+					
+					<h1>Bienvenido al register</h1>
+
+					<form action="" method="POST">
+						
+						<!-- Caja donde se muestra el error de logueo -->
+						<div id="msg_box"></div>
+
+						<input id="txt_email" type="email" name="txt_email" placeholder="Email" required>
+						<input id="txt_pass" type="password" name="txt_pass" placeholder="Contraseña" required>
+						<input id="txt_pass_repeat" type="password" name="txt_pass_repeat" placeholder="Repetir Contraseña" required>
+						<input id="btn_register" type="submit" id="btn_register" name="btn_register" value="Ingresar">
+
+					</form>
+				</div>
+
+			</div>
+		</div>
+	 <script type="text/javascript">
+	 	
+	 	/*< Al presionar el botón de logueo */
+	 	btn_register.addEventListener("click", e => {
+
+	 		/*< evita la recarga de la página */
+	 		e.preventDefault();
+
+	 		/*< Realiza el intento de logueo */
+	 		register(txt_email.value, txt_pass.value,txt_pass_repeat.value).then( data => {
+	 			// si el logueo fue valido
+	 			if(data.list.errno == 200){
+					/*< Redirecciona al panel */
+					window.location.href = "login";
+				}
+	 			msg_box.textContent = data.list.error;
+	 		})
+	 	})
+
+
+	 	/**
+	 	 * 
+	 	 * @brief Realiza el logueo con el email y contraseña GET
+	 	 * @param string email correo electrónico del usuario
+	 	 * @param string pass contraseña del usuario
+	 	 * @return json respuesta del intento de logueo
+	 	 * 
+	 	 * */
+
+			async function register(email, pass, passr) {
+				// Verifica que las contraseñas coincidan
+				if (pass != passr) {
+					msg_box.textContent = "Las contraseñas no coinciden";
+					return;
+				}
+				// Define la URL del endpoint
+				const url = 'api/user/register';
+			
+				// Define el cuerpo de la solicitud
+				const requestBody = {
+					"txt_email": email,
+					"txt_pass": pass
+				};
+					// Realiza la solicitud POST
+					const response = await fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json' // Especifica que estamos enviando JSON
+						},
+						body: JSON.stringify(requestBody) // Convierte el cuerpo a JSON
+					});
+					// Convierte la respuesta a formato JSON
+					const data = await response.json();
+					// Devuelve los datos de la respuesta
+					return data;
+
+			}
+
+	 </script>
+
+	  </div>
+
+@extern('footer')
